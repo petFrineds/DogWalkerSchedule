@@ -1,13 +1,13 @@
 package petfriends;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import petfriends.config.KafkaProcessor;
+import petfriends.dogwalkerschedule.dto.Created;
 import petfriends.dogwalkerschedule.dto.ScheduleRegistered;
+import petfriends.dogwalkerschedule.model.DogWalkerSchedule;
+import petfriends.dogwalkerschedule.model.ReservedYn;
 import petfriends.dogwalkerschedule.repository.DogWalkerScheduleRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -41,5 +41,24 @@ public class PolicyHandler{
             
         }
     }
+
+    //예약 생성되엇을 때
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverPayed_(@Payload Created created)
+    {
+        if(created.isMe()){
+            Optional<DogWalkerSchedule> dogWalkerScheduleOptional = dogWalkerScheduleRepository.findById(created.getDogwalkerScheduleId());
+
+            if(dogWalkerScheduleOptional.isPresent()) {
+                DogWalkerSchedule dogWalkerSchedule = dogWalkerScheduleOptional.get();
+                dogWalkerSchedule.setReservedYn(ReservedYn.Y);
+                dogWalkerScheduleRepository.save(dogWalkerSchedule);
+            }else{
+                new RuntimeException("해당 도그워커 스케줄 ID가 존재하지 않습니다.");
+            }
+        }
+    }
+
+    //예약취소 되었을 때 -> 결재로 부터 업데이트 받기
 
 }

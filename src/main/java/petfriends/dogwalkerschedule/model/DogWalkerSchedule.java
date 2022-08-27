@@ -10,9 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
 import javax.persistence.Table;
 
+import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,25 +26,43 @@ import petfriends.dogwalkerschedule.dto.ScheduleRegistered;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Table(name = "dogwalkerschedule")
 public class DogWalkerSchedule {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "dogWalkerSchedule_id")
+	@Column(name = "dogwalker_schedule_id")
 	private Long id;
-	private Long userId;
-	private String userName;
-	private Double avgScore;
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone="GMT+9")
+
+	//도그워커의 회원아이디
+	@Column(name="dogwalker_id")
+	private String dogwalkerId;
+
+	//도그워커의 회원이름
+	@Column(name="dogwalker_name")
+	private String dogwalkerName;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")	@Column(name="reserved_start_time")
 	private Date reservedStartTime;
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone="GMT+9")
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")	@Column(name = "reserved_end_time")
 	private Date reservedEndTime;
+
+	@Column(name = "walking_place")
 	@Enumerated(EnumType.STRING)
 	private WalkingPlace walkingPlace; // 산책장소
+
+	@Column(name="reserved_yn")
 	@Enumerated(EnumType.STRING)
-	private reservedYn reservedYn; // 예약여부
-	private int career;
-	private int price;
+	private ReservedYn reservedYn; // 예약여부
+
+	private String career;
+	//시간에 대한 총금액(단가 아님)
+	private double amount;
+
+	@Column(name="reg_date")
+	Date regDate;
+
 	@PostPersist
 	public void onPostPersist() {
 		ScheduleRegistered scheduleRegistered = new ScheduleRegistered();
@@ -52,107 +70,29 @@ public class DogWalkerSchedule {
 		scheduleRegistered.publishAfterCommit();
 	}
 
-	public static DogWalkerSchedule of(Long userId, 
-			String userName, 
-			Double avgScore, 
-			int career, 
+	public static DogWalkerSchedule of(
+			String dogwalkerId,
+			String dogwalkerName,
+			String career,
 			Date reservedStartTime,
 			Date reservedEndTime,
 			WalkingPlace walkingPlace, // 산책장소
-			int price, // 예약여부
-			reservedYn reservedYn 
+			Double amount, // 예약여부
+			ReservedYn reservedYn,
+			Date regDate
 
 	) {
 		return DogWalkerSchedule.builder()
-				.userId(userId)
-				.userName(userName)
-				.avgScore(avgScore)
+				.dogwalkerId(dogwalkerId)
+				.dogwalkerName(dogwalkerName)
 				.career(career)
 				.reservedStartTime(reservedStartTime)
 				.reservedEndTime(reservedEndTime)
 				.walkingPlace(walkingPlace)
-				.price(price)
-				.reservedYn(reservedYn).build();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public Double getAvgScore() {
-		return avgScore;
-	}
-
-	public void setAvgScore(Double avgScore) {
-		this.avgScore = avgScore;
-	}
-
-	public Date getReservedStartTime() {
-		return reservedStartTime;
-	}
-
-	public void setReservedStartTime(Date reservedStartTime) {
-		this.reservedStartTime = reservedStartTime;
-	}
-
-	public Date getReservedEndTime() {
-		return reservedEndTime;
-	}
-
-	public void setReservedEndTime(Date reservedEndTime) {
-		this.reservedEndTime = reservedEndTime;
-	}
-
-	public WalkingPlace getWalkingPlace() {
-		return walkingPlace;
-	}
-
-	public void setWalkingPlace(WalkingPlace walkingPlace) {
-		this.walkingPlace = walkingPlace;
-	}
-
-	public reservedYn getReservedYn() {
-		return reservedYn;
-	}
-
-	public void setReservedYn(reservedYn reservedYn) {
-		this.reservedYn = reservedYn;
-	}
-
-	public int getCareer() {
-		return career;
-	}
-
-	public void setCareer(int career) {
-		this.career = career;
-	}
-
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
+				.amount(amount)
+				.reservedYn(reservedYn)
+				.regDate(regDate)
+				.build();
 	}
 
 }

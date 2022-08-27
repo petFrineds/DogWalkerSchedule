@@ -2,6 +2,7 @@ package petfriends.dogwalkerschedule.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 
@@ -20,29 +21,28 @@ public class DogWalkerScheduleService {
 	 @Autowired
 	 DogWalkerScheduleRepository dogWalkerScheduleRepository;
 	 
-	 public List<DogWalkerSchedule> findAllByUserId(String userId) {
-		 return dogWalkerScheduleRepository.findAllByUserId(userId);
+	 public List<DogWalkerSchedule> findAllByDogwalkerId(String dogwalkerId) {
+		 return dogWalkerScheduleRepository.findAllByDogwalkerId(dogwalkerId);
 	 } 
 	 public List<DogWalkerSchedule> findAllDogWalkerSchedule(){
 		 return dogWalkerScheduleRepository.findAll();
 	 }
 	 // 일지 작성
 	 @Transactional
-	 public DogWalkerSchedule registerDogWalkerSchedule(DogWalkScheduleRegisterView registerData) throws Exception {
+	 public DogWalkerSchedule registerDogWalkerSchedule(DogWalkerSchedule registerData) throws Exception {
 		 DogWalkerSchedule dogWalkerScheduleRegister = DogWalkerSchedule.of(
-				 registerData.getUserId(),
-				 registerData.getUserName(),
-				 registerData.getAvgScore(),
+				 registerData.getDogwalkerId(),
+				 registerData.getDogwalkerName(),
 				 registerData.getCareer(),
-				 registerData.getReservedStartTime(), 
-				 registerData.getReservedEndTime(), 
+				 registerData.getReservedStartTime(),
+				 registerData.getReservedEndTime(),
 				 registerData.getWalkingPlace(),
-				 registerData.getPrice(),
-				 registerData.getReservedYn());
-	
-		 
+				 registerData.getAmount(),
+				 registerData.getReservedYn(),
+				 java.sql.Timestamp.valueOf(LocalDateTime.now()) // regDate
+				 );
 		 return dogWalkerScheduleRepository.save(dogWalkerScheduleRegister);
-		 
+
 	 }
 		 
 }

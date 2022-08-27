@@ -1,17 +1,18 @@
 package petfriends.dogwalkerschedule.controller;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import petfriends.dogwalkerschedule.model.DogWalkerSchedule;
+import petfriends.dogwalkerschedule.model.WalkingPlace;
+import petfriends.dogwalkerschedule.repository.DogWalkerScheduleRepository;
 import petfriends.dogwalkerschedule.service.DogWalkerScheduleService;
 import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 
@@ -20,22 +21,52 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 
 	 @Autowired
 	 DogWalkerScheduleService dogWalkerScheduleService;
-	 
-	 @GetMapping("/dogWalkerSchedule/{userId}")
-	 public List<DogWalkerSchedule> findAllByUserId(@PathVariable("userId") String userId) {
-		 return dogWalkerScheduleService.findAllByUserId(userId);
+
+	 @Autowired
+	 DogWalkerScheduleRepository dogWalkerScheduleRepository;
+
+
+	 @GetMapping("/dogWalkerSchedules/{dogwalkerId}")
+	 public List<DogWalkerSchedule> findAllByUserId(@PathVariable("dogwalkerId") String dogwalkerId) {
+		 return dogWalkerScheduleService.findAllByDogwalkerId(dogwalkerId);
 	 }
-	 @GetMapping("/dogWalkerSchedule")
+	 @GetMapping("/dogWalkerSchedules")
 	 public List<DogWalkerSchedule> findAllDogWalkerSchedule() {
 		 return dogWalkerScheduleService.findAllDogWalkerSchedule();
 	 }
-	 @PostMapping("/dogWalkerSchedule")
-	 public ResponseEntity<DogWalkerSchedule> registerDogWalkerSchedule(@RequestBody DogWalkScheduleRegisterView registerData) throws Exception {
-		 System.out.println(registerData);
-		 DogWalkerSchedule registSchedule = dogWalkerScheduleService.registerDogWalkerSchedule(registerData);
+	 @PostMapping("/dogWalkerSchedules")
+	 public ResponseEntity<DogWalkerSchedule> registerDogWalkerSchedule(@RequestBody DogWalkerSchedule dogWalkerSchedule) throws Exception {
+		 System.out.println(dogWalkerSchedule.toString());
+		 DogWalkerSchedule registSchedule = dogWalkerScheduleService.registerDogWalkerSchedule(dogWalkerSchedule);
 		 
 		 return ResponseEntity.ok(registSchedule);
-		 
+	 }
+
+	 @PatchMapping("/dogWalkerSchedules/{id}")
+	 public ResponseEntity<DogWalkerSchedule> updateDogwalkerSchedule(@PathVariable("id") final Long id,
+																	  @RequestBody DogWalkerSchedule dogWalkerSchedule){
+
+		 Optional<DogWalkerSchedule> dogWalkerScheduleOptional = dogWalkerScheduleRepository.findById(id);
+
+		 if(dogWalkerScheduleOptional.isPresent()) {
+			 dogWalkerScheduleRepository.save(dogWalkerSchedule);
+		 }else{
+			 new RuntimeException("해당 도그워커스케줄 ID가 존재하지 않습니다.");
+		 }
+
+		 return ResponseEntity.ok(dogWalkerSchedule);
+	 }
+
+	//산책지역 json 처리 방법 확인필요!
+	 @GetMapping("/dogWalkerSchedules/walkingPlace")
+	public List<String> findAllWalkingPlace(){
+
+
+		 List<String> walkingPlaces = Stream.of(WalkingPlace.values()).map(Enum::name).collect(Collectors.toList());
+
+		 System.out.println(walkingPlaces);
+
+		 return walkingPlaces;
 	 }
  }
 

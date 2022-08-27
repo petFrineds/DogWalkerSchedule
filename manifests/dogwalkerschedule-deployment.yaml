@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dogwalkerschedule-backend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dogwalkerschedule-backend
+  template:
+    metadata:
+      labels:
+        app: dogwalkerschedule-backend
+    spec:
+      containers:
+        - name: dogwalkerschedule-backend
+          image: 811288377093.dkr.ecr.us-west-2.amazonaws.com/dogwalkerschedule-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATE
+              value: 'DATE_STRING'
+          env:   # Setting Enviornmental Variables
+            - name: HOST_NAME   # Setting Database host address from configMap
+              valueFrom :
+                configMapKeyRef :
+                  name : db-config
+                  key :  host
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom :
+                configMapKeyRef :
+                  name : db-config
+                  key :  dbName
+            - name: DB_USERNAME  # Setting Database username from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : db-secrets
+                  key :  username
+            - name: DB_PASSWORD # Setting Database password from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : db-secrets
+                  key :  password

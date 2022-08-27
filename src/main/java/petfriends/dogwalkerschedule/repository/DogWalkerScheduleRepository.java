@@ -7,6 +7,6 @@ import petfriends.dogwalkerschedule.model.DogWalkerSchedule;
 
 public interface DogWalkerScheduleRepository extends JpaRepository<DogWalkerSchedule, Long>{
 
-    List<DogWalkerSchedule> findAllByUserId(String userId);
-    
+    List<DogWalkerSchedule> findAllByDogwalkerId(String userId);
+
 }
