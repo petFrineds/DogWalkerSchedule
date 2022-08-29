@@ -11,12 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PostPersist;
 import javax.persistence.Table;
-
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

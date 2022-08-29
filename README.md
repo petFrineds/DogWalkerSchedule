@@ -25,20 +25,21 @@ insert into dogwalkerschedule (dogwalker_id, dogwalker_name, reserved_start_time
 values ("geny_id", "geny", "2022-08-30 19:00", "2022-08-30 21:00", "서울시_관악구", null, "시츄 10년동안 길러봄", 40000, "2022-08-27 14:34:00");
 
 ---------------------------------------------------  
-2. kafka설치  
+2. aws 배포 
 ---------------------------------------------------  
-참고사이트 : http://www.msaschool.io/operation/implementation/implementation-seven/  
+git clone https://github.com/petFrineds/DogwalkerSchedule.git 
+// git pull 
+aws ecr create-repository --repository-name dogwalkerschedule-backend --image-scanning-configuration scanOnPush=true --region us-west-2
+docker build -t dogwalkerschedule-backend .
+docker tag dogwalkerschedule-backend:latest 811288377093.dkr.ecr.$AWS_REGION.amazonaws.com/dogwalkerschedule-backend:latest
+docker push 811288377093.dkr.ecr.us-west-2.amazonaws.com/dogwalkerschedule-backend:latest
 
---------------------------------------------------  
-3. Payment(mariadb), Shop(hsqldb) 실행 및 테스트  
---------------------------------------------------  
-1) Payment에서 아래와 같이 api 통해 데이터 생성하면, mariadb[payment테이블]에 데이터 저장되고, message publish.  
-    - 데이터생성(postman사용) : POST http://localhost:8082/payments/   
-                              { "reservedId": "202203271311", "userId": "soya95", "amount": "10000", "payDate": "2019-03-10 10:22:33.102" }  
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 811288377093.dkr.ecr.us-west-2.amazonaws.com/
 
-    - 조회 : GET http://localhost:8082/payments/1  
-
-3) Shop에서 message 받아와 저장 ( 아래 PloycyHandler.java가 실행됨 )  
+kubectl apply -f dogwalkerschedule-deployment.yaml
+kubectl get deploy
+kubectl apply -f dogwalkerschedule-service.yaml
+kubectl get deploy
 
 --------------------------------------------------  
 4. 구조  

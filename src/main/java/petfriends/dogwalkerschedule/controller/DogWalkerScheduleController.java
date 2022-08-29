@@ -26,15 +26,15 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 	 DogWalkerScheduleRepository dogWalkerScheduleRepository;
 
 
-	 @GetMapping("/dogWalkerSchedules/{dogwalkerId}")
+	 @GetMapping("/dogwalkerschedules/{dogwalkerId}")
 	 public List<DogWalkerSchedule> findAllByUserId(@PathVariable("dogwalkerId") String dogwalkerId) {
 		 return dogWalkerScheduleService.findAllByDogwalkerId(dogwalkerId);
 	 }
-	 @GetMapping("/dogWalkerSchedules")
+	 @GetMapping("/dogwalkerschedules")
 	 public List<DogWalkerSchedule> findAllDogWalkerSchedule() {
 		 return dogWalkerScheduleService.findAllDogWalkerSchedule();
 	 }
-	 @PostMapping("/dogWalkerSchedules")
+	 @PostMapping("/dogwalkerschedules")
 	 public ResponseEntity<DogWalkerSchedule> registerDogWalkerSchedule(@RequestBody DogWalkerSchedule dogWalkerSchedule) throws Exception {
 		 System.out.println(dogWalkerSchedule.toString());
 		 DogWalkerSchedule registSchedule = dogWalkerScheduleService.registerDogWalkerSchedule(dogWalkerSchedule);
@@ -42,7 +42,7 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 		 return ResponseEntity.ok(registSchedule);
 	 }
 
-	 @PatchMapping("/dogWalkerSchedules/{id}")
+	 @PatchMapping("/dogwalkerschedules/{id}")
 	 public ResponseEntity<DogWalkerSchedule> updateDogwalkerSchedule(@PathVariable("id") final Long id,
 																	  @RequestBody DogWalkerSchedule dogWalkerSchedule){
 
@@ -58,7 +58,7 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 	 }
 
 	//산책지역 json 처리 방법 확인필요!
-	 @GetMapping("/dogWalkerSchedules/walkingPlace")
+	 @GetMapping("/dogwalkerschedules/walkingPlace")
 	public List<String> findAllWalkingPlace(){
 
 
