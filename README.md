@@ -36,9 +36,11 @@ docker push 811288377093.dkr.ecr.us-west-2.amazonaws.com/dogwalkerschedule-backe
 
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 811288377093.dkr.ecr.us-west-2.amazonaws.com/
 
-kubectl apply -f dogwalkerschedule-deployment.yaml
+kubectl delete pods -l app=dogwalkerschedule-backend
+
+kubectl apply -f manifests/dogwalkerschedule-deployment.yaml
 kubectl get deploy
-kubectl apply -f dogwalkerschedule-service.yaml
+kubectl apply -f manifests/dogwalkerschedule-service.yaml
 kubectl get deploy
 
 --------------------------------------------------  
