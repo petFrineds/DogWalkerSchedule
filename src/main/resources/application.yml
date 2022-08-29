@@ -49,9 +49,24 @@ logging:
 server:
   port: 8087
 ---
-
 spring:
   profiles: docker
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${HOST_NAME}:3306/petfriends?characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${DB_USERNAME}
+    password:
+    hikari:
+      initialization-fail-timeout: 0
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true #To beautify or pretty print the SQL
+        show_sql: true #show sql
+
+
   cloud:
     stream:
       kafka:
@@ -67,9 +82,17 @@ spring:
                   serde: org.apache.kafka.common.serialization.Serdes$StringSerde
       bindings:
         event-in:
-          group: DogWalkerSchedule
+          group: Reservation
           destination: petfriends
           contentType: application/json
         event-out:
           destination: petfriends
           contentType: application/json
+logging:
+  level:
+    org.hibernate.type: trace
+    org.hibernate:
+      type.descriptor.sql: trace #show parameter binding
+      SQL: DEBUG
+    org.springframework.cloud: debug
+
