@@ -15,21 +15,20 @@ CREATE TABLE  dogwalkerschedule(
     reserved_end_time DATETIME NULL DEFAULT NULL,
     walking_place VARCHAR(50) NULL DEFAULT NULL,
     reserved_yn VARCHAR(1) NULL DEFAULT NULL,
-    career VARCHAR(500) NULL DEFAULT NULL,
     amount DOUBLE NULL DEFAULT NULL,
     reg_date DATETIME NULL DEFAULT NULL
  ) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB ;  
 
 insert샘플: 
 insert into dogwalkerschedule (dogwalker_id, dogwalker_name, reserved_start_time, reserved_end_time, walking_place, reserved_yn, career, amount, reg_date) 
-values ("geny_id", "geny", "2022-08-30 19:00", "2022-08-30 21:00", "서울시_관악구", null, "시츄 10년동안 길러봄", 40000, "2022-08-27 14:34:00");
+values ("geny_id", "geny", "2022-08-30 19:00", "2022-08-30 21:00", "서울시_관악구", null, 40000, "2022-08-27 14:34:00");
 
 ---------------------------------------------------  
 2. aws 배포 
 ---------------------------------------------------  
 git clone https://github.com/petFrineds/DogwalkerSchedule.git 
-// git pull 
-aws ecr create-repository --repository-name dogwalkerschedule-backend --image-scanning-configuration scanOnPush=true --region us-west-2
+//aws ecr create-repository --repository-name dogwalkerschedule-backend --image-scanning-configuration scanOnPush=true --region us-west-2
+git pull
 docker build -t dogwalkerschedule-backend .
 docker tag dogwalkerschedule-backend:latest 811288377093.dkr.ecr.$AWS_REGION.amazonaws.com/dogwalkerschedule-backend:latest
 docker push 811288377093.dkr.ecr.us-west-2.amazonaws.com/dogwalkerschedule-backend:latest

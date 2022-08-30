@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +28,12 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 
 
 	 @GetMapping("/dogwalkerschedules/{dogwalkerId}")
-	 public List<DogWalkerSchedule> findAllByUserId(@PathVariable("dogwalkerId") String dogwalkerId) {
-		 return dogWalkerScheduleService.findAllByDogwalkerId(dogwalkerId);
+	 public ResponseEntity<List<DogWalkerSchedule>> findAllByUserId(@PathVariable("dogwalkerId") String dogwalkerId) {
+		 return ResponseEntity.ok(dogWalkerScheduleService.findAllByDogwalkerId(dogwalkerId));
 	 }
 	 @GetMapping("/dogwalkerschedules")
-	 public List<DogWalkerSchedule> findAllDogWalkerSchedule() {
-		 return dogWalkerScheduleService.findAllDogWalkerSchedule();
+	 public ResponseEntity<List<DogWalkerSchedule>> findAllDogWalkerSchedule() {
+		 return ResponseEntity.ok(dogWalkerScheduleService.findAllDogWalkerSchedule());
 	 }
 	 @PostMapping("/dogwalkerschedules")
 	 public ResponseEntity<DogWalkerSchedule> registerDogWalkerSchedule(@RequestBody DogWalkerSchedule dogWalkerSchedule) throws Exception {
@@ -42,20 +43,14 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 		 return ResponseEntity.ok(registSchedule);
 	 }
 
-	 @PatchMapping("/dogwalkerschedules/{id}")
-	 public ResponseEntity<DogWalkerSchedule> updateDogwalkerSchedule(@PathVariable("id") final Long id,
-																	  @RequestBody DogWalkerSchedule dogWalkerSchedule){
+	 @DeleteMapping("/dogwalkerschedules/{id}")
+	 public HttpStatus deleteDogwalkerSchedule(@PathVariable("id") Long id){
+		 dogWalkerScheduleRepository.deleteById(id);
 
-		 Optional<DogWalkerSchedule> dogWalkerScheduleOptional = dogWalkerScheduleRepository.findById(id);
-
-		 if(dogWalkerScheduleOptional.isPresent()) {
-			 dogWalkerScheduleRepository.save(dogWalkerSchedule);
-		 }else{
-			 new RuntimeException("해당 도그워커스케줄 ID가 존재하지 않습니다.");
-		 }
-
-		 return ResponseEntity.ok(dogWalkerSchedule);
+		 return HttpStatus.OK;
 	 }
+
+
 
 	//산책지역 json 처리 방법 확인필요!
 	 @GetMapping("/dogwalkerschedules/walkingPlace")
