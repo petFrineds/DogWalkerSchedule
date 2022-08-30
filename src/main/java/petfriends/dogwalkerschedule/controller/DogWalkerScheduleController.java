@@ -37,6 +37,7 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 	 }
 	 @PostMapping("/dogwalkerschedules")
 	 public ResponseEntity<DogWalkerSchedule> registerDogWalkerSchedule(@RequestBody DogWalkerSchedule dogWalkerSchedule) throws Exception {
+
 		 System.out.println(dogWalkerSchedule.toString());
 		 DogWalkerSchedule registSchedule = dogWalkerScheduleService.registerDogWalkerSchedule(dogWalkerSchedule);
 		 
