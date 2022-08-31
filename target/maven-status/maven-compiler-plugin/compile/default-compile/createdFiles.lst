@@ -1,3 +1,5 @@
+petfriends/dogwalkerschedule/dto/Refunded.class
 petfriends/dogwalkerschedule/dto/ReservationStatus.class
 petfriends/dogwalkerschedule/dto/Created.class
 petfriends/config/SwaggerConfig.class
+petfriends/dogwalkerschedule/dto/PayType.class

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import petfriends.dogwalkerschedule.model.DogWalkerSchedule;
+import petfriends.dogwalkerschedule.model.ReservedYn;
 import petfriends.dogwalkerschedule.repository.DogWalkerScheduleRepository;
 import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 
@@ -33,12 +34,11 @@ public class DogWalkerScheduleService {
 		 DogWalkerSchedule dogWalkerScheduleRegister = DogWalkerSchedule.of(
 				 registerData.getDogwalkerId(),
 				 registerData.getDogwalkerName(),
-				 registerData.getCareer(),
 				 registerData.getReservedStartTime(),
 				 registerData.getReservedEndTime(),
 				 registerData.getWalkingPlace(),
 				 registerData.getAmount(),
-				 registerData.getReservedYn(),
+				 ReservedYn.N,
 				 java.sql.Timestamp.valueOf(LocalDateTime.now()) // regDate
 				 );
 		 return dogWalkerScheduleRepository.save(dogWalkerScheduleRegister);

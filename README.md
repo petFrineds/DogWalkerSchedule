@@ -14,14 +14,15 @@ CREATE TABLE  dogwalkerschedule(
     reserved_start_time DATETIME NULL DEFAULT NULL,
     reserved_end_time DATETIME NULL DEFAULT NULL,
     walking_place VARCHAR(50) NULL DEFAULT NULL,
+    reserved_id BIGINT(20) NULL,
     reserved_yn VARCHAR(1) NULL DEFAULT NULL,
     amount DOUBLE NULL DEFAULT NULL,
     reg_date DATETIME NULL DEFAULT NULL
  ) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB ;  
 
 insert샘플: 
-insert into dogwalkerschedule (dogwalker_id, dogwalker_name, reserved_start_time, reserved_end_time, walking_place, reserved_yn, career, amount, reg_date) 
-values ("geny_id", "geny", "2022-08-30 19:00", "2022-08-30 21:00", "서울시_관악구", null, 40000, "2022-08-27 14:34:00");
+insert into dogwalkerschedule (dogwalker_id, dogwalker_name, reserved_start_time, reserved_end_time, walking_place, reserved_yn, amount, reg_date) 
+values ("geny_id", "geny", a, "2022-08-30 21:00", "서울_관악구", null, 40000, "2022-08-27 14:34:00");
 
 ---------------------------------------------------  
 2. aws 배포 

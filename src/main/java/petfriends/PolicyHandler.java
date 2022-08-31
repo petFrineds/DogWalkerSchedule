@@ -1,8 +1,9 @@
 package petfriends;
 
+import lombok.extern.slf4j.Slf4j;
 import petfriends.config.KafkaProcessor;
 import petfriends.dogwalkerschedule.dto.Created;
-import petfriends.dogwalkerschedule.dto.ScheduleRegistered;
+import petfriends.dogwalkerschedule.dto.Refunded;
 import petfriends.dogwalkerschedule.model.DogWalkerSchedule;
 import petfriends.dogwalkerschedule.model.ReservedYn;
 import petfriends.dogwalkerschedule.repository.DogWalkerScheduleRepository;
@@ -14,6 +15,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class PolicyHandler{
     @StreamListener(KafkaProcessor.INPUT)
@@ -24,34 +26,17 @@ public class PolicyHandler{
     @Autowired
     DogWalkerScheduleRepository dogWalkerScheduleRepository;
 
-    @StreamListener(KafkaProcessor.INPUT)
-    public void wheneverOrderCancelled_(@Payload ScheduleRegistered orderCancelled){
-
-    	if(orderCancelled.isMe()){
-            System.out.println("##### listener  : " + orderCancelled.toJson());
-            
-            //List<Payment> list = paymentRepository.findByOrderId(orderCancelled.getId()); // mariadb  추가하면서 주석
-            
-            //for(Payment payment : list){
-            	// payment.setCancelYn("Y"); // 테이블 변경하면서 주석처리 2202.06.27
-                // view 객체에 이벤트의 eventDirectValue 를 set 함
-                // view 레파지 토리에 save
-            //	paymentRepository.save(payment);
-            //}
-            
-        }
-    }
-
     //예약 생성되엇을 때
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverPayed_(@Payload Created created)
     {
         if(created.isMe()){
             Optional<DogWalkerSchedule> dogWalkerScheduleOptional = dogWalkerScheduleRepository.findById(created.getDogwalkerScheduleId());
-
+            log.info(">>>> Created : " + created.toJson());
             if(dogWalkerScheduleOptional.isPresent()) {
                 DogWalkerSchedule dogWalkerSchedule = dogWalkerScheduleOptional.get();
                 dogWalkerSchedule.setReservedYn(ReservedYn.Y);
+                dogWalkerSchedule.setReservedId(created.getReservedId());
                 dogWalkerScheduleRepository.save(dogWalkerSchedule);
             }else{
                 new RuntimeException("해당 도그워커 스케줄 ID가 존재하지 않습니다.");
@@ -61,4 +46,20 @@ public class PolicyHandler{
 
     //예약취소 되었을 때 -> 결재로 부터 업데이트 받기
 
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverRefunded_(@Payload Refunded refunded)
+    {
+        if(refunded.isMe()){
+            DogWalkerSchedule dogWalkerSchedule =
+                    dogWalkerScheduleRepository.findByReservedId(refunded.getReservedId());
+
+            if( dogWalkerSchedule != null ) {
+                dogWalkerSchedule.setReservedYn(null);
+                dogWalkerSchedule.setReservedId(null);
+                dogWalkerScheduleRepository.save(dogWalkerSchedule);
+            }else{
+                new RuntimeException("해당 도그워커 스케줄 ID가 존재하지 않습니다.");
+            }
+        }
+    }
 }

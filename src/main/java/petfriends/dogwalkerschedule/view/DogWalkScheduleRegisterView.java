@@ -17,7 +17,6 @@ public class DogWalkScheduleRegisterView {
     private Date reservedStartTime;
     private Date reservedEndTime;
     private WalkingPlace walkingPlace;	// 산책장소
-    private String career;
     private double amount;
     private String dogwalkerId;			// 회원ID
     private String dogwalkerName;       // 회원명

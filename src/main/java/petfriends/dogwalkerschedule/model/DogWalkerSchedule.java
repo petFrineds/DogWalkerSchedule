@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import petfriends.dogwalkerschedule.dto.ScheduleRegistered;
 
 @Entity
 @Builder
@@ -53,7 +52,9 @@ public class DogWalkerSchedule {
 	@Enumerated(EnumType.STRING)
 	private ReservedYn reservedYn; // 예약여부
 
-	private String career;
+	@Column(name="reserved_id")
+	private Long reservedId;
+
 	//시간에 대한 총금액(단가 아님)
 	private double amount;
 
@@ -62,15 +63,13 @@ public class DogWalkerSchedule {
 
 	@PostPersist
 	public void onPostPersist() {
-		ScheduleRegistered scheduleRegistered = new ScheduleRegistered();
-		BeanUtils.copyProperties(this, scheduleRegistered);
-		scheduleRegistered.publishAfterCommit();
+		//
+
 	}
 
 	public static DogWalkerSchedule of(
 			String dogwalkerId,
 			String dogwalkerName,
-			String career,
 			Date reservedStartTime,
 			Date reservedEndTime,
 			WalkingPlace walkingPlace, // 산책장소
@@ -82,7 +81,6 @@ public class DogWalkerSchedule {
 		return DogWalkerSchedule.builder()
 				.dogwalkerId(dogwalkerId)
 				.dogwalkerName(dogwalkerName)
-				.career(career)
 				.reservedStartTime(reservedStartTime)
 				.reservedEndTime(reservedEndTime)
 				.walkingPlace(walkingPlace)

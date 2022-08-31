@@ -9,5 +9,7 @@ public interface DogWalkerScheduleRepository extends JpaRepository<DogWalkerSche
 
     List<DogWalkerSchedule> findAllByDogwalkerId(String userId);
 
+    DogWalkerSchedule findByReservedId(Long reservedId);
+
 
 }
