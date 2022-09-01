@@ -36,8 +36,8 @@ phases:
       - AWS_ECR_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - DATE='date'
       - echo Build completed on $DATE
-      - sed -i.bak 's#AWS_ECR_URI#'"$AWS_ECR_URI"'#' ./manifests/walk-deployment.yaml
-      - sed -i.bak 's#DATE_STRING#'"$DATE"'#' ./manifests/walk-deployment.yaml
-      - kubectl apply -f ./manifests/walk-deployment.yaml
-      - kubectl apply -f ./manifests/walk-service.yaml
-      #- kubectl apply -f ./manifests/walk-ingress.yaml
+      - sed -i.bak 's#AWS_ECR_URI#'"$AWS_ECR_URI"'#' ./manifests/dogwalkerschedule-deployment.yaml
+      - sed -i.bak 's#DATE_STRING#'"$DATE"'#' ./manifests/dogwalkerschedule-deployment.yaml
+      - kubectl apply -f ./manifests/dogwalkerschedule-deployment.yaml
+      - kubectl apply -f ./manifests/dogwalkerschedule-service.yaml
+      #- kubectl apply -f ./manifests/dogwalkerschedule-ingress.yaml
