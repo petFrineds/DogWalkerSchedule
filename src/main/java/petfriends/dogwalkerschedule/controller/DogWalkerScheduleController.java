@@ -31,10 +31,17 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 	 public ResponseEntity<List<DogWalkerSchedule>> findAllByUserId(@PathVariable("dogwalkerId") String dogwalkerId) {
 		 return ResponseEntity.ok(dogWalkerScheduleService.findAllByDogwalkerId(dogwalkerId));
 	 }
+
+	 @GetMapping("/dogwalkerschedules/index/{id}")
+	 public ResponseEntity<DogWalkerSchedule> findAllByUserId(@PathVariable("id") Long id) {
+		 return ResponseEntity.ok(dogWalkerScheduleRepository.findById(id).get());
+	 }
 	 @GetMapping("/dogwalkerschedules")
 	 public ResponseEntity<List<DogWalkerSchedule>> findAllDogWalkerSchedule() {
 		 return ResponseEntity.ok(dogWalkerScheduleService.findAllDogWalkerSchedule());
 	 }
+
+
 	 @PostMapping("/dogwalkerschedules")
 	 public ResponseEntity<DogWalkerSchedule> registerDogWalkerSchedule(@RequestBody DogWalkerSchedule dogWalkerSchedule) throws Exception {
 
