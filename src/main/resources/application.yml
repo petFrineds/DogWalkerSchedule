@@ -47,7 +47,8 @@ logging:
       SQL: DEBUG
     org.springframework.cloud: debug
 server:
-  port: 8087
+  port: 8080
+
 ---
 spring:
   profiles: docker
@@ -96,3 +97,10 @@ logging:
       SQL: DEBUG
     org.springframework.cloud: debug
 
+  application:
+    name: DogWalkerSchedule
+  sleuth:
+    sampler:
+      probability: 1.0
+    zipkin:
+      base-url: http://34.219.82.75:9411/
