@@ -2,15 +2,8 @@ package petfriends.dogwalkerschedule.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PostPersist;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -60,6 +53,10 @@ public class DogWalkerSchedule {
 
 	@Column(name="reg_date")
 	Date regDate;
+
+
+	@Transient
+	int sortSeq;
 
 	@PostPersist
 	public void onPostPersist() {

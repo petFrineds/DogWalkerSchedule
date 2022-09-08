@@ -9,6 +9,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import petfriends.dogwalkerschedule.model.DogWalkerSchedule;
@@ -22,11 +23,11 @@ public class DogWalkerScheduleService {
 	 @Autowired
 	 DogWalkerScheduleRepository dogWalkerScheduleRepository;
 	 
-	 public List<DogWalkerSchedule> findAllByDogwalkerId(String dogwalkerId) {
-		 return dogWalkerScheduleRepository.findAllByDogwalkerId(dogwalkerId);
+	 public List<DogWalkerSchedule> findAllByDogwalkerId(String dogwalkerId, Sort sort) {
+		 return dogWalkerScheduleRepository.findAllByDogwalkerId(dogwalkerId, sort);
 	 } 
-	 public List<DogWalkerSchedule> findAllDogWalkerSchedule(){
-		 return dogWalkerScheduleRepository.findAll();
+	 public List<DogWalkerSchedule> findAllDogWalkerSchedule(Sort sort){
+		 return dogWalkerScheduleRepository.findAll(sort);
 	 }
 	 // 일지 작성
 	 @Transactional

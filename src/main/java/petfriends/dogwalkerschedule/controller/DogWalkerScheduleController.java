@@ -1,5 +1,6 @@
 package petfriends.dogwalkerschedule.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,6 +8,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,15 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 
 	 @GetMapping("/dogwalkerschedules/{dogwalkerId}")
 	 public ResponseEntity<List<DogWalkerSchedule>> findAllByUserId(@PathVariable("dogwalkerId") String dogwalkerId) {
-		 return ResponseEntity.ok(dogWalkerScheduleService.findAllByDogwalkerId(dogwalkerId));
+
+		 Sort sort = sortByvReservedYn();
+		 //return ResponseEntity.ok(dogWalkerScheduleService.findAllByDogwalkerId(dogwalkerId));
+
+		 List<DogWalkerSchedule> dogWalkerSchedules =
+				 dogWalkerScheduleRepository.findAllByDogwalkerId(dogwalkerId, sort);
+
+		 return ResponseEntity.ok(dogWalkerSchedules);
+
 	 }
 
 	 @GetMapping("/dogwalkerschedules/index/{id}")
@@ -38,7 +48,9 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 	 }
 	 @GetMapping("/dogwalkerschedules")
 	 public ResponseEntity<List<DogWalkerSchedule>> findAllDogWalkerSchedule() {
-		 return ResponseEntity.ok(dogWalkerScheduleService.findAllDogWalkerSchedule());
+
+		 Sort sort = sortByvReservedYn();
+		 return ResponseEntity.ok(dogWalkerScheduleService.findAllDogWalkerSchedule(sort));
 	 }
 
 
@@ -63,14 +75,16 @@ import petfriends.dogwalkerschedule.view.DogWalkScheduleRegisterView;
 	//산책지역 json 처리 방법 확인필요!
 	 @GetMapping("/dogwalkerschedules/walkingPlace")
 	public List<String> findAllWalkingPlace(){
-
-
 		 List<String> walkingPlaces = Stream.of(WalkingPlace.values()).map(Enum::name).collect(Collectors.toList());
-
 		 System.out.println(walkingPlaces);
 
 		 return walkingPlaces;
 	 }
+
+	 private Sort sortByvReservedYn() {
+		 return Sort.by(Sort.Direction.ASC, "reservedYn");
+	 }
+
  }
 
  

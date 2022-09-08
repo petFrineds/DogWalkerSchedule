@@ -22,7 +22,14 @@ CREATE TABLE  dogwalkerschedule(
 
 insert샘플: 
 insert into dogwalkerschedule (dogwalker_id, dogwalker_name, reserved_start_time, reserved_end_time, walking_place, reserved_yn, amount, reg_date) 
-values ("geny_id", "geny", a, "2022-08-30 21:00", "서울_관악구", null, 40000, "2022-08-27 14:34:00");
+values ("jam_id", "jam",  "2022-08-30 21:00", "2022-08-30 23:00", "서울_관악구", "N", 40000, "2022-08-27 14:34:00");
+
+
+insert into dogwalkerschedule (dogwalker_id, dogwalker_name, reserved_start_time, reserved_end_time, walking_place, reserved_yn, amount, reg_date)
+values ("jam_id", "jam",  "2022-08-30 21:00", "2022-08-30 24:00", "서울_강동구", "Y", 40000, "2022-08-27 14:34:00");
+
+insert into dogwalkerschedule (dogwalker_id, dogwalker_name, reserved_start_time, reserved_end_time, walking_place, reserved_yn, amount, reg_date)
+values ("jam_id", "jam", "2022-08-30 21:00","2022-08-30 20:00",  "서울_강남구", "Y", 40000, "2022-08-27 14:34:00");
 
 ---------------------------------------------------  
 2. aws 배포 
